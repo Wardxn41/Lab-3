@@ -30,14 +30,16 @@ class DataItem {
     private String country;
     private int year;
     private String category;
+    private String removalDate;
     private double latitude;
     private double longitude;
 
-    public DataItem(String siteName, String country, int year, String category, double latitude, double longitude) {
+    public DataItem(String siteName, String country, int year, String category, String removalDate, double latitude, double longitude) {
         this.siteName = siteName;
         this.country = country;
         this.year = year;
         this.category = category;
+        this.removalDate = removalDate;
         this.latitude = latitude;
         this.longitude = longitude;
     }
@@ -46,12 +48,14 @@ class DataItem {
     public String getCountry() { return country; }
     public int getYear() { return year; }
     public String getCategory() { return category; }
+    public String getRemovalDate() { return removalDate; }
     public double getLatitude() { return latitude; }
     public double getLongitude() { return longitude; }
 
     @Override
     public String toString() {
         return siteName + " | " + country + " | " + year + " | " + category +
+                " | Inscription: " + removalDate +
                 " | Lat: " + latitude + " | Lon: " + longitude;
     }
 }
@@ -84,7 +88,7 @@ class CSVReader {
                 String[] values = line.split(","); // Adjust if delimiter is different
 
                 // Ensure all required columns exist
-                if (values.length < 6 || values[4].trim().isEmpty() || values[5].trim().isEmpty()) {
+                if (values.length < 7 || values[5].trim().isEmpty() || values[6].trim().isEmpty()) {
                     System.out.println("Skipping invalid row: " + line);
                     continue;
                 }
@@ -94,10 +98,11 @@ class CSVReader {
                     String country = values[1].trim();
                     int year = Integer.parseInt(values[2].trim());
                     String category = values[3].trim();
-                    double latitude = Double.parseDouble(values[4].trim());
-                    double longitude = Double.parseDouble(values[5].trim());
+                    String removalDate = values[4].trim();
+                    double latitude = Double.parseDouble(values[5].trim());
+                    double longitude = Double.parseDouble(values[6].trim());
 
-                    dataList.add(new DataItem(siteName, country, year, category, latitude, longitude));
+                    dataList.add(new DataItem(siteName, country, year, category, removalDate, latitude, longitude));
                 } catch (NumberFormatException e) {
                     System.out.println("Skipping row due to parsing error: " + line);
                 }
@@ -112,7 +117,8 @@ class CSVReader {
 // View
 class MainFrame extends JFrame {
     public MainFrame(List<DataItem> dataList) {
-        setTitle("Data Visualization Tool");
+        super("World Heritage Data Visualization Tool"); // 🆕 Set the window title here
+
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -125,7 +131,7 @@ class MainFrame extends JFrame {
 // Table Model for JTable
 class DataTableModel extends AbstractTableModel {
     private final List<DataItem> dataList;
-    private final String[] columnNames = {"Site Name", "Country", "Year", "Category", "Latitude", "Longitude"};
+    private final String[] columnNames = {"Site Name", "Country", "Inscription Date", "In Danger?", "Removal Date", "Latitude", "Longitude"};
 
     public DataTableModel(List<DataItem> dataList) {
         this.dataList = dataList;
@@ -154,8 +160,9 @@ class DataTableModel extends AbstractTableModel {
             case 1 -> dataItem.getCountry();
             case 2 -> dataItem.getYear();
             case 3 -> dataItem.getCategory();
-            case 4 -> dataItem.getLatitude();
-            case 5 -> dataItem.getLongitude();
+            case 4 -> dataItem.getRemovalDate();
+            case 5 -> dataItem.getLatitude();
+            case 6 -> dataItem.getLongitude();
             default -> null;
         };
     }
