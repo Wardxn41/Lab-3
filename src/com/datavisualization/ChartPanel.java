@@ -3,15 +3,20 @@ package com.datavisualization;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ChartPanel extends JPanel {
     private List<DataItem> dataList;
+    private StatsPanel statsPanel;
 
     public ChartPanel(List<DataItem> dataList) {
         this.dataList = dataList;
-        setPreferredSize(new Dimension(400, 300));
+        this.statsPanel = statsPanel;
+        setPreferredSize(new Dimension(800, 1200));
+    }
+
+    public void updateChart() {
+        this.dataList = statsPanel.getFilteredData();
+        repaint();
     }
 
     @Override
@@ -20,24 +25,22 @@ public class ChartPanel extends JPanel {
         if (dataList == null || dataList.isEmpty()) return;
 
         Graphics2D g2d = (Graphics2D) g;
-        Map<String, Long> categoryCount = dataList.stream()
-                .collect(Collectors.groupingBy(DataItem::getCategory, Collectors.counting()));
-
         int panelWidth = getWidth();
         int panelHeight = getHeight();
-        int barWidth = panelWidth / categoryCount.size();
-        long maxCount = categoryCount.values().stream().max(Long::compare).orElse(1L); // Fix: Ensure Long type
+        int barWidth = 40;
+        int x = 50;
 
-        int scaleFactor = Math.max(1, (int) ((panelHeight - 100) / (double) maxCount)); // Fix: Prevent type mismatch
+        g2d.setColor(Color.BLACK);
+        g2d.drawLine(40, 50, 40, panelHeight - 50);
+        g2d.drawLine(40, panelHeight - 50, panelWidth - 10, panelHeight - 50);
 
-        int x = 10;
-        for (Map.Entry<String, Long> entry : categoryCount.entrySet()) {
-            int barHeight = Math.max(5, (int) (entry.getValue() * scaleFactor)); // Fix: Convert to int
+        for (DataItem item : dataList) {
+            int barHeight = 100; // Placeholder height, should be calculated dynamically
             g2d.setColor(Color.BLUE);
-            g2d.fillRect(x, panelHeight - barHeight - 50, barWidth - 10, barHeight);
+            g2d.fillRect(x, panelHeight - barHeight - 50, barWidth, barHeight);
             g2d.setColor(Color.BLACK);
-            g2d.drawString(entry.getKey(), x, panelHeight - 5);
-            x += barWidth;
+            g2d.drawString(String.valueOf(item.getYear()), x, panelHeight - 30);
+            x += barWidth + 10;
         }
     }
 }

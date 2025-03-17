@@ -4,11 +4,16 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 public class DataTableModel extends AbstractTableModel {
-    private final List<DataItem> dataList;
+    private List<DataItem> dataList;
     private final String[] columnNames = {"Site Name", "Country", "Inscription Date", "In Danger?", "Removal Date", "Latitude", "Longitude"};
 
     public DataTableModel(List<DataItem> dataList) {
         this.dataList = dataList;
+    }
+
+    public void setData(List<DataItem> newData) {
+        this.dataList = newData;
+        fireTableDataChanged(); // Notify table that data changed
     }
 
     @Override
@@ -41,4 +46,5 @@ public class DataTableModel extends AbstractTableModel {
         };
     }
 }
+
 
