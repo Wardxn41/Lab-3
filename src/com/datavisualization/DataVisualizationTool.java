@@ -7,7 +7,7 @@ import java.util.*;
 
 public class DataVisualizationTool {
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
-        String filePath = "C:/Users/henry/IdeaProjects/Lab3Pt1/Images/All_sites.csv"; // Adjust the path
+        String filePath = "Images/All_sites.csv"; // Adjust the path
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"));
         List<DataItem> dataList = CSVReader.readCSV(filePath);
 
