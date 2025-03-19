@@ -13,7 +13,7 @@ public class StatsPanel extends JPanel {
     private JComboBox<String> countryFilter;
     private Runnable updateCallback;
 
-    public StatsPanel(List<DataItem> dataList) {
+    public StatsPanel(List<DataItem> dataList, Runnable updateCallback) {
         this.dataList = dataList;
         this.updateCallback = updateCallback;
         setPreferredSize(new Dimension(400, 300));

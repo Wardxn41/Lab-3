@@ -21,6 +21,9 @@ public class Main {
         System.out.println("First Entry: " + dataList.get(0));
         System.out.println("Tenth Entry: " + (dataList.size() >= 10 ? dataList.get(9) : "Not enough entries"));
 
+
+        System.out.println("Loaded Data Size: " + dataList.size()); // Debugging
+        SwingUtilities.invokeLater(() -> new MainFrame(dataList));
         SwingUtilities.invokeLater(() -> new MainFrame(dataList).setVisible(true));
     }
 }

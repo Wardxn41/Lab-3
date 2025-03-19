@@ -28,4 +28,11 @@ public class TablePanel extends JPanel {
             }
         }
     }
+
+
+    // Get the JTable for selection listener integration
+    public JTable getTable() {
+        return table;
+    }
 }
+
